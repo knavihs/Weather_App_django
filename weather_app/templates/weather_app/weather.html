@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Report</title>
+</head>
+{% extends 'base.html' %}
+{% load static %}
+
+<body>
+{% block page_content%}
+ <!--Navbar-->
+            <nav class="navbar navbar-expand-lg navbar-dark primary-color">
+
+                <!-- Navbar brand -->
+
+                <!-- Collapse button -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+                aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Collapsible content -->
+                <div class="collapse navbar-collapse" id="basicExampleNav">
+
+                    <!-- Links -->
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- <a href="" class="btn btn-md btn-danger"><i class="fa fa-trash" aria-hidden="true"></i><span> Delete All Data </span></a> -->
+                <!-- Collapsible content -->
+            </nav>
+              <div class="container">
+               <div class="row">
+                   <div class="column is-offset-3">
+                            <a href="{% url 'home' %}"><img src="{% static 'weather_app/Django_Logo.png' %}" width="400" height="450" alt="logo">
+                            </a>
+                   </div>
+               </div>
+            </div>
+            <section class="section">
+                <div class="container">
+                    <div class="columns">
+                        <div class="column is-offset-4 is-4">
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="field has-addons">
+                            <div class="control is-expanded">
+                                {{ form.Name }}
+                            </div>
+                            <button class="button is-info">
+                                <i class="fa fa-plus"></i><span> Add City</span></button>
+                            </div>
+                                {% if msg %}
+                            <div class="alert {{message_class}}">{{msg}}</div>
+                        {% endif %}
+                            </form>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="container">
+                    <div class="columns">
+                        <div class="column is-offset-4 is-4">
+                            <div class="box">
+                                {% for city_weather in weather_data %}
+                                <article class="media">
+                                    <div class="media-left">
+                                        <figure class="image is-50x50">
+                                            <img src="http://openweathermap.org/img/wn/{{ city_weather.icon }}@2x.png" alt="Image">
+                                        </figure>
+                                    </div>
+                                    <div class="media-content">
+                                        <div class="content">
+                                            <p>
+                                                <span class="tittle">{{city_weather.city}}</span> &nbsp;<br>
+                                                <span class="subtitle">{{city_weather.temperature}}°C</span><br>
+                                                {{city_weather.description}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class = "media-right">
+                                        <button type="button" class="close" aria-label="Close">
+                                            <a href="{% url 'delete_city' city_weather.city %}"> <span aria-hidden="true">&times;</span></a>
+                                        </button>
+                                    </div>
+                                </article>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+{% endblock %}
+
+</body>
+</html>
